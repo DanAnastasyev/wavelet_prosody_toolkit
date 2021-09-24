@@ -138,12 +138,14 @@ def analysis(input_file, cfg, logger, annotation_dir=None, output_dir=None, plot
         energy = smooth_and_interp.smooth(energy, 10)
 
     # extract f0
-    raw_pitch = f0_processing.extract_f0(sig, orig_sr,
-                                         f0_min=cfg["f0"]["min_f0"],
-                                         f0_max=cfg["f0"]["max_f0"],
-                                         voicing=cfg["f0"]["voicing_threshold"],
-                                         #harmonics=cfg["f0"]["harmonics"],
-                                         configuration=cfg["f0"]["pitch_tracker"])
+    raw_pitch = f0_processing.read_f0(input_file)
+    if raw_pitch is None:
+        raw_pitch = f0_processing.extract_f0(sig, orig_sr,
+                                             f0_min=cfg["f0"]["min_f0"],
+                                             f0_max=cfg["f0"]["max_f0"],
+                                             voicing=cfg["f0"]["voicing_threshold"],
+                                             #harmonics=cfg["f0"]["harmonics"],
+                                             configuration=cfg["f0"]["pitch_tracker"])
     # interpolate, stylize
     pitch = f0_processing.process(raw_pitch)
 
